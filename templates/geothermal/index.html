@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% set title = "Geothermal Gradient — Linear Model" %}
+{% set h1 = "Geothermal Gradient: T(z) = T₀ + G·z" %}
+{% set subtitle = "Linear increase of temperature with depth (classroom model)" %}
+
+{% block content %}
+
+<div class="grid grid-2">
+  <section class="card">
+    <h2>About the model</h2>
+    <p>
+      This classroom model assumes temperature increases approximately
+      <em>linearly</em> with depth:
+      <strong>T(z) = T₀ + G·z</strong>,
+      where:
+    </p>
+    <ul>
+      <li><strong>T₀</strong> is the surface temperature (°C),</li>
+      <li><strong>G</strong> is the geothermal gradient (°C per kilometer),</li>
+      <li><strong>z</strong> is depth (kilometers, positive downward).</li>
+    </ul>
+
+    <p class="muted">
+      Math notes: This is a linear function with slope <strong>G</strong> and intercept <strong>T₀</strong>.
+      It’s strictly increasing if G &gt; 0. The inverse function (when G ≠ 0) is
+      <strong>z = (T − T₀) / G</strong>.
+    </p>
+
+    <hr>
+
+    <form method="get">
+      <div class="row">
+        <label>Surface temperature T₀ (°C)
+          <input type="number" step="any" name="T0" value="{{ T0 }}">
+        </label>
+        <label>Gradient G (°C/km)
+          <input type="number" step="any" name="G" value="{{ G }}">
+        </label>
+        <label>Plot depth range z<sub>max</sub> (km)
+          <input type="number" step="any" min="0" name="zmax" value="{{ zmax }}">
+        </label>
+        <label>Evaluate at depth z (km)
+          <input type="number" step="any" min="0" name="z" value="{{ zpoint }}">
+        </label>
+        <label>Inverse: target temperature T (°C)
+          <input type="number" step="any" name="T" value="{{ Ttarget }}">
+        </label>
+      </div>
+      <p style="margin-top: .75rem;">
+        <button type="submit">Update graph &amp; values</button>
+      </p>
+    </form>
+
+    <div class="grid" style="margin-top: .75rem;">
+      <div class="card" style="background:#fafafa;">
+        <strong>Forward (T at depth):</strong>
+        <p>
+          At depth <strong>z = {{ zpoint|round(3) }} km</strong>,
+          <strong>T = {{ T_at_z|round(3) }} °C</strong>.
+        </p>
+      </div>
+
+      <div class="card" style="background:#fafafa;">
+        <strong>Inverse (depth for a temperature):</strong>
+        {% if z_for_T is not none %}
+          <p>
+            For <strong>T = {{ Ttarget|round(3) }} °C</strong>,
+            the depth is
+            <strong>z = {{ z_for_T|round(3) }} km</strong>.
+          </p>
+        {% else %}
+          <p>Cannot compute inverse when G = 0 (no change with depth).</p>
+        {% endif %}
+      </div>
+    </div>
+  </section>
+
+  <section class="card">
+    <figure>
+      <img
+        src="{{ url_for('geothermal.plot_png', T0=T0, G=G, zmax=zmax, v=ts) }}"
+        alt="Plot of T(z) = T0 + G·z over the chosen depth range"
+        style="width:100%; height:auto; display:block; border-radius:8px;"
+      >
+      <figcaption>
+        Plot of <em>T(z) = T₀ + G·z</em> for 0 ≤ z ≤ {{ zmax|round(3) }} km.
+      </figcaption>
+    </figure>
+    <p class="muted" style="margin-top:.5rem;">
+      Tip: Increase <strong>G</strong> to make the line steeper (stronger heating with depth).
+      Increase <strong>z<sub>max</sub></strong> to view deeper crust.
+    </p>
+  </section>
+</div>
+
+{% endblock %}
