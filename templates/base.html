@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>{{ title or "Geoscience Functions" }}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --maxw: 980px;
+      --pad: 1rem;
+      --radius: 10px;
+      --accent: #2f4f4f;
+    }
+    body { font-family: system-ui, Segoe UI, Roboto, Arial, sans-serif; margin: 0; color: #222; }
+    header, main { max-width: var(--maxw); margin: 0 auto; padding: var(--pad); }
+    header h1 { margin: 0.2rem 0 0.2rem; color: var(--accent); }
+    .card {
+      border: 1px solid #e5e5e5; padding: var(--pad); border-radius: var(--radius);
+      background: #fff;
+      box-shadow: 0 1px 3px rgba(0,0,0,.05);
+    }
+    .grid { display: grid; gap: 1rem; }
+    .grid-2 { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+    form .row { display: grid; grid-template-columns: 1fr 1fr; gap: .5rem 1rem; }
+    label { font-weight: 600; }
+    input[type=number] {
+      width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 6px;
+    }
+    button {
+      padding: 0.6rem 0.9rem; border-radius: 8px; border: 1px solid var(--accent);
+      background: #f4f8f8; color: var(--accent); font-weight: 600; cursor: pointer;
+    }
+    .muted { color: #666; font-size: 0.95rem; }
+    footer { max-width: var(--maxw); margin: 2rem auto; padding: 0 var(--pad) 2rem; color: #666; }
+    figure { margin: 0; }
+    figcaption { text-align: center; color: #444; margin-top: .5rem; }
+    code { background: #f6f6f6; padding: .1rem .3rem; border-radius: 4px; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>{{ h1 or "Geothermal Gradient" }}</h1>
+    {% if subtitle %}<p class="muted">{{ subtitle }}</p>{% endif %}
+  </header>
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+  <footer class="muted">
+    Built with Flask + matplotlib. Try different numbers and watch the graph update.
+  </footer>
+</body>
+</html>
